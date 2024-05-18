@@ -1,14 +1,17 @@
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
+data "aws_vpc" "default" {
+  default = true
 }
 
 resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "10.0.1.0/24"
+  vpc_id            = data.aws_vpc.default.id
+  cidr_block        = "172.31.96.0/20"  # Use a valid CIDR block within the VPC range
   availability_zone = "ap-south-1a"
 }
 
 resource "aws_security_group" "my_security_group" {
-  vpc_id = aws_vpc.my_vpc.id
-  // Define security group rules if needed
+  name        = "my-security-group"
+  description = "Managed by Terraform"
+  vpc_id      = data.aws_vpc.default.id
+
+  // Define your security group rules here
 }
